@@ -1,0 +1,1870 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LexiBoost — Personal Vocabulary Trainer</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary: #6c63ff;
+    --primary-dark: #5148e5;
+    --secondary: #00b894;
+    --accent: #ffb703;
+    --danger: #ff5c5c;
+    --dark: #151528;
+    --text: #27273a;
+    --muted: #77778b;
+    --bg: #f5f6fb;
+    --card: #ffffff;
+    --border: #e7e7f0;
+    --shadow: 0 15px 40px rgba(31, 31, 68, .08);
+}
+
+body {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* ================= HEADER ================= */
+
+header {
+    background: linear-gradient(135deg, #16162c, #292750);
+    color: white;
+    padding: 18px 5%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 5px 25px rgba(0,0,0,.15);
+}
+
+.nav {
+    max-width: 1250px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -.5px;
+}
+
+.logo span {
+    color: #8d86ff;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.nav-buttons button {
+    border: none;
+    background: transparent;
+    color: #ddd;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.nav-buttons button:hover,
+.nav-buttons button.active {
+    background: rgba(255,255,255,.12);
+    color: white;
+}
+
+/* ================= MAIN ================= */
+
+.container {
+    width: 90%;
+    max-width: 1250px;
+    margin: 35px auto 70px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+/* ================= HERO ================= */
+
+.hero {
+    background:
+        radial-gradient(circle at 90% 20%, rgba(108,99,255,.4), transparent 35%),
+        linear-gradient(135deg, #19182f, #39346f);
+    color: white;
+    padding: 45px;
+    border-radius: 28px;
+    margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: "A B C";
+    position: absolute;
+    right: 25px;
+    bottom: -35px;
+    font-size: 130px;
+    font-weight: 900;
+    color: rgba(255,255,255,.035);
+}
+
+.hero h1 {
+    font-size: clamp(32px, 5vw, 54px);
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.hero p {
+    color: #d6d5ed;
+    max-width: 600px;
+    font-size: 17px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+/* ================= BUTTONS ================= */
+
+button {
+    font-family: inherit;
+}
+
+.btn {
+    border: none;
+    padding: 13px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 800;
+    transition: .2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-light {
+    background: white;
+    color: var(--dark);
+}
+
+.btn-danger {
+    background: #fff0f0;
+    color: var(--danger);
+}
+
+.btn-success {
+    background: #e7fff7;
+    color: #008f70;
+}
+
+.btn-secondary {
+    background: #eeeefe;
+    color: var(--primary);
+}
+
+/* ================= STATS ================= */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: var(--card);
+    padding: 22px;
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+}
+
+.stat-icon {
+    font-size: 24px;
+}
+
+.stat-number {
+    font-size: 30px;
+    font-weight: 900;
+    margin: 5px 0;
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* ================= CARDS ================= */
+
+.card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.section-title {
+    margin-bottom: 18px;
+}
+
+.section-title h2 {
+    font-size: 24px;
+}
+
+.section-title p {
+    color: var(--muted);
+    margin-top: 5px;
+}
+
+/* ================= ADD WORD ================= */
+
+.add-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: #fafaff;
+    border-radius: 12px;
+    padding: 14px;
+    font-family: inherit;
+    outline: none;
+    font-size: 15px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(108,99,255,.1);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.form-actions {
+    margin-top: 18px;
+}
+
+/* ================= VOCABULARY ================= */
+
+.word-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.word-card {
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    padding: 20px;
+    background: white;
+    position: relative;
+}
+
+.word-card h3 {
+    font-size: 23px;
+    margin-bottom: 5px;
+}
+
+.meaning {
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.example {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.word-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.mastery {
+    background: #f0efff;
+    color: var(--primary);
+    padding: 6px 9px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.delete-word {
+    background: none;
+    border: none;
+    color: #bbb;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.delete-word:hover {
+    color: var(--danger);
+}
+
+/* ================= ACTIVITIES ================= */
+
+.activity-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.activity-option {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 18px;
+    padding: 20px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.activity-option:hover {
+    transform: translateY(-3px);
+}
+
+.activity-option.selected {
+    border-color: var(--primary);
+    background: #f5f4ff;
+}
+
+.activity-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.activity-option h3 {
+    margin-bottom: 5px;
+}
+
+.activity-option p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.game {
+    min-height: 430px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-inner {
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+}
+
+.question-number {
+    color: var(--primary);
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.game-question {
+    font-size: clamp(22px, 4vw, 34px);
+    line-height: 1.35;
+    margin: 20px 0 30px;
+}
+
+.blank {
+    display: inline-block;
+    min-width: 130px;
+    border-bottom: 4px solid var(--primary);
+    color: var(--primary);
+}
+
+.answer-input {
+    max-width: 420px;
+    margin: auto;
+    text-align: center;
+    font-size: 20px;
+}
+
+.feedback {
+    min-height: 28px;
+    margin: 18px 0;
+    font-weight: 800;
+}
+
+.correct {
+    color: #00a67d;
+}
+
+.incorrect {
+    color: var(--danger);
+}
+
+/* ================= MATCHING ================= */
+
+.match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.match-item {
+    border: 2px solid var(--border);
+    background: white;
+    padding: 17px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.match-item:hover {
+    border-color: var(--primary);
+}
+
+.match-item.selected {
+    background: #f0efff;
+    border-color: var(--primary);
+}
+
+.match-item.matched {
+    background: #e8fff8;
+    border-color: #00b894;
+    color: #00866d;
+    pointer-events: none;
+}
+
+/* ================= FLASHCARD ================= */
+
+.flashcard {
+    width: min(520px, 100%);
+    height: 290px;
+    margin: auto;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.flashcard-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform .6s;
+    transform-style: preserve-3d;
+}
+
+.flashcard.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.flash-side {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.flash-front {
+    background: linear-gradient(135deg, #6c63ff, #8d86ff);
+    color: white;
+}
+
+.flash-back {
+    background: white;
+    color: var(--text);
+    transform: rotateY(180deg);
+    border: 1px solid var(--border);
+}
+
+.flash-word {
+    font-size: 42px;
+    font-weight: 900;
+}
+
+.flash-hint {
+    opacity: .7;
+    margin-top: 10px;
+}
+
+.flash-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* ================= PROGRESS ================= */
+
+.progress-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.progress-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 50px;
+    align-items: center;
+    gap: 15px;
+}
+
+.progress-bar {
+    height: 10px;
+    border-radius: 20px;
+    background: #ededf4;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #9a94ff);
+}
+
+/* ================= EMPTY ================= */
+
+.empty {
+    text-align: center;
+    padding: 55px 20px;
+    color: var(--muted);
+}
+
+.empty-icon {
+    font-size: 55px;
+    margin-bottom: 10px;
+}
+
+.empty h3 {
+    color: var(--text);
+    margin-bottom: 7px;
+}
+
+/* ================= TOAST ================= */
+
+.toast {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #17172b;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.2);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: .3s;
+    z-index: 1000;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width: 900px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .word-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .activity-selector {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 650px) {
+    header {
+        position: static;
+    }
+
+    .nav {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .nav-buttons {
+        overflow-x: auto;
+    }
+
+    .nav-buttons button {
+        white-space: nowrap;
+    }
+
+    .container {
+        width: 94%;
+        margin-top: 20px;
+    }
+
+    .hero {
+        padding: 30px 22px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .add-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+
+    .word-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .progress-row {
+        grid-template-columns: 80px 1fr 35px;
+        font-size: 13px;
+    }
+
+    .match-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="nav">
+        <div class="logo">Lexi<span>Boost</span> 📚</div>
+
+        <div class="nav-buttons">
+            <button class="active" onclick="showPage('dashboard', this)">Dashboard</button>
+            <button onclick="showPage('vocabulary', this)">My Words</button>
+            <button onclick="showPage('practice', this)">Practice</button>
+            <button onclick="showPage('progress', this)">Progress</button>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboard" class="page active">
+
+    <div class="hero">
+        <h1>Build your vocabulary.</h1>
+        <p>
+            Add the English words you want to learn and turn them
+            into personalized games, challenges, and practice sessions.
+        </p>
+
+        <div class="hero-actions">
+            <button class="btn btn-light" onclick="showPage('vocabulary')">
+                + Add New Words
+            </button>
+
+            <button class="btn btn-primary" onclick="startPractice()">
+                Start Practicing →
+            </button>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-icon">📚</div>
+            <div class="stat-number" id="totalWords">0</div>
+            <div class="stat-label">My Words</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-number" id="activitiesCompleted">0</div>
+            <div class="stat-label">Activities Completed</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-number" id="streak">0</div>
+            <div class="stat-label">Practice Streak</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-number" id="masteredWords">0</div>
+            <div class="stat-label">Mastered Words</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-title">
+            <h2>How LexiBoost works</h2>
+            <p>Your activities are generated exclusively from your vocabulary.</p>
+        </div>
+
+        <div class="activity-selector">
+            <div class="activity-option">
+                <div class="activity-icon">🧩</div>
+                <h3>Fill the Blank</h3>
+                <p>Complete sentences using words from your list.</p>
+            </div>
+
+            <div class="activity-option">
+                <div class="activity-icon">🔗</div>
+                <h3>Word Match</h3>
+                <p>Match your vocabulary words with their meanings.</p>
+            </div>
+
+            <div class="activity-option">
+                <div class="activity-icon">🃏</div>
+                <h3>Flashcards</h3>
+                <p>Review your words using interactive cards.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- ================= VOCABULARY ================= -->
+
+<section id="vocabulary" class="page">
+
+    <div class="card">
+
+        <div class="section-title">
+            <h2>Add a New Word</h2>
+            <p>Create your personal English vocabulary collection.</p>
+        </div>
+
+        <div class="add-grid">
+
+            <div>
+                <label>English Word *</label>
+                <input id="wordInput" type="text" placeholder="e.g. achieve">
+            </div>
+
+            <div>
+                <label>Meaning</label>
+                <input id="meaningInput" type="text" placeholder="e.g. to successfully complete something">
+            </div>
+
+            <div class="full">
+                <label>Example Sentence</label>
+                <textarea id="exampleInput"
+                    placeholder="e.g. She worked hard to achieve her goals."></textarea>
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" onclick="addWord()">
+                + Add Word
+            </button>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <div class="section-title">
+            <h2>My Vocabulary</h2>
+            <p id="wordCountText">0 words in your personal list.</p>
+        </div>
+
+        <div id="wordList" class="word-grid"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PRACTICE ================= -->
+
+<section id="practice" class="page">
+
+    <div class="card">
+
+        <div class="section-title">
+            <h2>Practice Arena 🎮</h2>
+            <p>Choose an activity and practice only your own vocabulary.</p>
+        </div>
+
+        <div class="activity-selector">
+
+            <div class="activity-option selected"
+                 onclick="selectActivity('fill', this)">
+                <div class="activity-icon">🧩</div>
+                <h3>Fill the Blank</h3>
+                <p>Complete sentences.</p>
+            </div>
+
+            <div class="activity-option"
+                 onclick="selectActivity('match', this)">
+                <div class="activity-icon">🔗</div>
+                <h3>Word Match</h3>
+                <p>Match words and meanings.</p>
+            </div>
+
+            <div class="activity-option"
+                 onclick="selectActivity('flash', this)">
+                <div class="activity-icon">🃏</div>
+                <h3>Flashcards</h3>
+                <p>Review your vocabulary.</p>
+            </div>
+
+        </div>
+
+        <div id="game" class="game"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PROGRESS ================= -->
+
+<section id="progress" class="page">
+
+    <div class="card">
+
+        <div class="section-title">
+            <h2>Your Learning Progress 📈</h2>
+            <p>See how familiar you are with each word.</p>
+        </div>
+
+        <div id="progressList" class="progress-list"></div>
+
+    </div>
+
+</section>
+
+</main>
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+let words = JSON.parse(localStorage.getItem("lexiboost_words")) || [];
+
+let stats = JSON.parse(localStorage.getItem("lexiboost_stats")) || {
+    activities: 0,
+    streak: 0,
+    lastPractice: null
+};
+
+let currentActivity = "fill";
+let currentWord = null;
+let currentFlashIndex = 0;
+let flashWords = [];
+
+let matchSelected = null;
+let matchedCount = 0;
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function saveData() {
+    localStorage.setItem(
+        "lexiboost_words",
+        JSON.stringify(words)
+    );
+
+    localStorage.setItem(
+        "lexiboost_stats",
+        JSON.stringify(stats)
+    );
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function showPage(pageId, button) {
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    document.getElementById(pageId).classList.add("active");
+
+    if (button) {
+        document.querySelectorAll(".nav-buttons button")
+            .forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+    }
+
+    if (pageId === "vocabulary") {
+        renderWords();
+    }
+
+    if (pageId === "progress") {
+        renderProgress();
+    }
+
+    if (pageId === "practice") {
+        loadActivity();
+    }
+
+    updateDashboard();
+}
+
+
+/* =========================================================
+   ADD WORD
+========================================================= */
+
+function addWord() {
+
+    const word = document
+        .getElementById("wordInput")
+        .value
+        .trim();
+
+    const meaning = document
+        .getElementById("meaningInput")
+        .value
+        .trim();
+
+    const example = document
+        .getElementById("exampleInput")
+        .value
+        .trim();
+
+    if (!word) {
+        showToast("Please enter an English word.");
+        return;
+    }
+
+    const exists = words.some(
+        item => item.word.toLowerCase() === word.toLowerCase()
+    );
+
+    if (exists) {
+        showToast("That word is already in your list.");
+        return;
+    }
+
+    words.push({
+        id: Date.now(),
+        word,
+        meaning: meaning || "No meaning added",
+        example: example || `I learned the word "${word}" today.`,
+        correct: 0,
+        incorrect: 0,
+        mastery: 0
+    });
+
+    saveData();
+
+    document.getElementById("wordInput").value = "";
+    document.getElementById("meaningInput").value = "";
+    document.getElementById("exampleInput").value = "";
+
+    renderWords();
+    updateDashboard();
+
+    showToast(`"${word}" added to your vocabulary!`);
+}
+
+
+/* =========================================================
+   RENDER WORDS
+========================================================= */
+
+function renderWords() {
+
+    const container = document.getElementById("wordList");
+
+    document.getElementById("wordCountText").textContent =
+        `${words.length} word${words.length !== 1 ? "s" : ""} in your personal list.`;
+
+    if (!words.length) {
+
+        container.innerHTML = `
+            <div class="empty full">
+                <div class="empty-icon">📖</div>
+                <h3>Your vocabulary is empty</h3>
+                <p>Add your first English word above to start learning.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = words.map(word => `
+
+        <div class="word-card">
+
+            <button
+                class="delete-word"
+                title="Delete word"
+                onclick="deleteWord(${word.id})">
+                ✕
+            </button>
+
+            <h3>${escapeHTML(word.word)}</h3>
+
+            <div class="meaning">
+                ${escapeHTML(word.meaning)}
+            </div>
+
+            <div class="example">
+                "${escapeHTML(word.example)}"
+            </div>
+
+            <div class="word-meta">
+
+                <span class="mastery">
+                    ${getMasteryLabel(word.mastery)}
+                </span>
+
+                <span>
+                    ${word.correct} correct
+                </span>
+
+            </div>
+
+        </div>
+
+    `).join("");
+}
+
+
+/* =========================================================
+   DELETE WORD
+========================================================= */
+
+function deleteWord(id) {
+
+    const word = words.find(item => item.id === id);
+
+    if (!word) return;
+
+    if (!confirm(`Delete "${word.word}" from your vocabulary?`)) {
+        return;
+    }
+
+    words = words.filter(item => item.id !== id);
+
+    saveData();
+
+    renderWords();
+    updateDashboard();
+
+    showToast("Word deleted.");
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function updateDashboard() {
+
+    document.getElementById("totalWords").textContent =
+        words.length;
+
+    document.getElementById("activitiesCompleted").textContent =
+        stats.activities;
+
+    document.getElementById("streak").textContent =
+        stats.streak;
+
+    document.getElementById("masteredWords").textContent =
+        words.filter(word => word.mastery >= 80).length;
+}
+
+
+/* =========================================================
+   ACTIVITY SELECTOR
+========================================================= */
+
+function selectActivity(type, element) {
+
+    currentActivity = type;
+
+    document.querySelectorAll(".activity-option")
+        .forEach(item => item.classList.remove("selected"));
+
+    element.classList.add("selected");
+
+    loadActivity();
+}
+
+
+/* =========================================================
+   START PRACTICE
+========================================================= */
+
+function startPractice() {
+
+    showPage("practice");
+
+    loadActivity();
+}
+
+
+/* =========================================================
+   LOAD ACTIVITY
+========================================================= */
+
+function loadActivity() {
+
+    const game = document.getElementById("game");
+
+    if (!words.length) {
+
+        game.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">📚</div>
+                <h3>Add some words first!</h3>
+                <p>Your activities are created from your personal vocabulary.</p>
+                <br>
+                <button class="btn btn-primary"
+                    onclick="showPage('vocabulary')">
+                    Add My First Word
+                </button>
+            </div>
+        `;
+
+        return;
+    }
+
+    if (words.length < 2 && currentActivity === "match") {
+
+        game.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">🔗</div>
+                <h3>Add at least 2 words</h3>
+                <p>The matching game needs two or more vocabulary words.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    if (currentActivity === "fill") {
+        createFillGame();
+    }
+
+    if (currentActivity === "match") {
+        createMatchGame();
+    }
+
+    if (currentActivity === "flash") {
+        createFlashcards();
+    }
+}
+
+
+/* =========================================================
+   FILL IN THE BLANK
+========================================================= */
+
+function createFillGame() {
+
+    currentWord =
+        words[Math.floor(Math.random() * words.length)];
+
+    let sentence = currentWord.example;
+
+    let regex = new RegExp(
+        "\\b" + escapeRegExp(currentWord.word) + "\\b",
+        "i"
+    );
+
+    if (regex.test(sentence)) {
+
+        sentence = sentence.replace(
+            regex,
+            `<span class="blank">_____</span>`
+        );
+
+    } else {
+
+        sentence =
+            `Complete this sentence with the correct word: ` +
+            `<br><br>_____ is the word I am learning today.`;
+
+    }
+
+    document.getElementById("game").innerHTML = `
+
+        <div class="game-inner">
+
+            <div class="question-number">
+                FILL IN THE BLANK
+            </div>
+
+            <div class="game-question">
+                ${sentence}
+            </div>
+
+            <input
+                id="answerInput"
+                class="answer-input"
+                placeholder="Type your answer..."
+                autocomplete="off"
+                onkeydown="if(event.key === 'Enter') checkFillAnswer()"
+            >
+
+            <div id="feedback" class="feedback"></div>
+
+            <button
+                class="btn btn-primary"
+                onclick="checkFillAnswer()">
+                Check Answer
+            </button>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   CHECK FILL ANSWER
+========================================================= */
+
+function checkFillAnswer() {
+
+    const input = document
+        .getElementById("answerInput")
+        .value
+        .trim();
+
+    const feedback =
+        document.getElementById("feedback");
+
+    if (!input) {
+        feedback.innerHTML =
+            `<span class="incorrect">Type an answer first.</span>`;
+        return;
+    }
+
+    if (
+        input.toLowerCase() ===
+        currentWord.word.toLowerCase()
+    ) {
+
+        feedback.innerHTML =
+            `<span class="correct">✓ Correct! Great job!</span>`;
+
+        currentWord.correct++;
+
+        increaseMastery(currentWord, true);
+
+        completeActivity();
+
+        setTimeout(() => {
+            createFillGame();
+        }, 900);
+
+    } else {
+
+        feedback.innerHTML =
+            `<span class="incorrect">
+                ✕ Not quite. The answer is "${escapeHTML(currentWord.word)}".
+            </span>`;
+
+        currentWord.incorrect++;
+
+        increaseMastery(currentWord, false);
+
+        saveData();
+    }
+
+    updateDashboard();
+}
+
+
+/* =========================================================
+   WORD MATCHING
+========================================================= */
+
+function createMatchGame() {
+
+    const selected =
+        shuffle([...words]).slice(
+            0,
+            Math.min(4, words.length)
+        );
+
+    let left = shuffle([...selected]);
+
+    let right = shuffle([...selected]);
+
+    matchSelected = null;
+    matchedCount = 0;
+
+    document.getElementById("game").innerHTML = `
+
+        <div class="game-inner">
+
+            <div class="question-number">
+                WORD MATCH
+            </div>
+
+            <div class="game-question">
+                Match each word with its meaning.
+            </div>
+
+            <div class="match-grid">
+
+                <div>
+                    ${left.map(word => `
+                        <div
+                            class="match-item"
+                            data-id="${word.id}"
+                            data-side="word"
+                            onclick="selectMatch(this)">
+                            ${escapeHTML(word.word)}
+                        </div>
+                    `).join("")}
+                </div>
+
+                <div>
+                    ${right.map(word => `
+                        <div
+                            class="match-item"
+                            data-id="${word.id}"
+                            data-side="meaning"
+                            onclick="selectMatch(this)">
+                            ${escapeHTML(word.meaning)}
+                        </div>
+                    `).join("")}
+                </div>
+
+            </div>
+
+            <div id="matchFeedback" class="feedback"></div>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   MATCH SELECTION
+========================================================= */
+
+function selectMatch(element) {
+
+    if (element.classList.contains("matched")) {
+        return;
+    }
+
+    const side = element.dataset.side;
+    const id = element.dataset.id;
+
+    if (!matchSelected) {
+
+        matchSelected = {
+            side,
+            id,
+            element
+        };
+
+        element.classList.add("selected");
+
+        return;
+    }
+
+    if (matchSelected.side === side) {
+
+        document
+            .querySelectorAll(".match-item")
+            .forEach(item =>
+                item.classList.remove("selected")
+            );
+
+        matchSelected = {
+            side,
+            id,
+            element
+        };
+
+        element.classList.add("selected");
+
+        return;
+    }
+
+    const feedback =
+        document.getElementById("matchFeedback");
+
+    if (matchSelected.id === id) {
+
+        element.classList.add("matched");
+        matchSelected.element.classList.add("matched");
+
+        element.classList.remove("selected");
+        matchSelected.element.classList.remove("selected");
+
+        const word = words.find(
+            item => item.id == id
+        );
+
+        if (word) {
+            word.correct++;
+            increaseMastery(word, true);
+        }
+
+        matchedCount++;
+
+        feedback.innerHTML =
+            `<span class="correct">✓ Perfect match!</span>`;
+
+        matchSelected = null;
+
+        if (
+            matchedCount >=
+            Math.min(4, words.length)
+        ) {
+
+            completeActivity();
+
+            setTimeout(() => {
+                createMatchGame();
+            }, 900);
+        }
+
+    } else {
+
+        feedback.innerHTML =
+            `<span class="incorrect">✕ Try again.</span>`;
+
+        const wrongWord =
+            words.find(item => item.id == matchSelected.id);
+
+        if (wrongWord) {
+            wrongWord.incorrect++;
+            increaseMastery(wrongWord, false);
+        }
+
+        document
+            .querySelectorAll(".match-item")
+            .forEach(item =>
+                item.classList.remove("selected")
+            );
+
+        matchSelected = null;
+    }
+
+    saveData();
+    updateDashboard();
+}
+
+
+/* =========================================================
+   FLASHCARDS
+========================================================= */
+
+function createFlashcards() {
+
+    flashWords = shuffle([...words]);
+
+    currentFlashIndex = 0;
+
+    renderFlashcard();
+}
+
+
+function renderFlashcard() {
+
+    if (!flashWords.length) return;
+
+    const word = flashWords[currentFlashIndex];
+
+    document.getElementById("game").innerHTML = `
+
+        <div class="game-inner">
+
+            <div class="question-number">
+                FLASHCARD ${currentFlashIndex + 1}
+                / ${flashWords.length}
+            </div>
+
+            <div
+                class="flashcard"
+                id="flashcard"
+                onclick="flipCard()">
+
+                <div class="flashcard-inner">
+
+                    <div class="flash-side flash-front">
+
+                        <div>
+                            <div class="flash-word">
+                                ${escapeHTML(word.word)}
+                            </div>
+
+                            <div class="flash-hint">
+                                Tap to reveal meaning
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="flash-side flash-back">
+
+                        <div>
+
+                            <h2>
+                                ${escapeHTML(word.meaning)}
+                            </h2>
+
+                            <p class="flash-hint">
+                                ${escapeHTML(word.example)}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="flash-controls">
+
+                <button
+                    class="btn btn-danger"
+                    onclick="rateFlash(false)">
+                    ✕ Need Practice
+                </button>
+
+                <button
+                    class="btn btn-success"
+                    onclick="rateFlash(true)">
+                    ✓ I Know It
+                </button>
+
+            </div>
+
+        </div>
+    `;
+}
+
+
+function flipCard() {
+
+    const card =
+        document.getElementById("flashcard");
+
+    if (card) {
+        card.classList.toggle("flipped");
+    }
+}
+
+
+function rateFlash(known) {
+
+    const word =
+        flashWords[currentFlashIndex];
+
+    if (known) {
+        word.correct++;
+        increaseMastery(word, true);
+    } else {
+        word.incorrect++;
+        increaseMastery(word, false);
+    }
+
+    saveData();
+
+    if (currentFlashIndex < flashWords.length - 1) {
+
+        currentFlashIndex++;
+
+        renderFlashcard();
+
+    } else {
+
+        completeActivity();
+
+        document.getElementById("game").innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">🎉</div>
+
+                <h3>Flashcard session complete!</h3>
+
+                <p>
+                    You reviewed ${flashWords.length} words.
+                </p>
+
+                <br>
+
+                <button
+                    class="btn btn-primary"
+                    onclick="createFlashcards()">
+                    Practice Again
+                </button>
+
+            </div>
+        `;
+    }
+
+    updateDashboard();
+}
+
+
+/* =========================================================
+   MASTERY
+========================================================= */
+
+function increaseMastery(word, correct) {
+
+    if (correct) {
+
+        word.mastery = Math.min(
+            100,
+            word.mastery + 10
+        );
+
+    } else {
+
+        word.mastery = Math.max(
+            0,
+            word.mastery - 5
+        );
+    }
+}
+
+
+function getMasteryLabel(level) {
+
+    if (level >= 80) return "Mastered ⭐";
+    if (level >= 50) return "Learning";
+    if (level > 0) return "Getting Started";
+
+    return "New";
+}
+
+
+/* =========================================================
+   COMPLETE ACTIVITY
+========================================================= */
+
+function completeActivity() {
+
+    stats.activities++;
+
+    const today =
+        new Date().toISOString().slice(0, 10);
+
+    if (stats.lastPractice !== today) {
+
+        const yesterday =
+            new Date(Date.now() - 86400000)
+                .toISOString()
+                .slice(0, 10);
+
+        if (stats.lastPractice === yesterday) {
+            stats.streak++;
+        } else {
+            stats.streak = 1;
+        }
+
+        stats.lastPractice = today;
+    }
+
+    saveData();
+    updateDashboard();
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+function renderProgress() {
+
+    const container =
+        document.getElementById("progressList");
+
+    if (!words.length) {
+
+        container.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">📊</div>
+                <h3>No progress yet</h3>
+                <p>Add words and complete activities to see your progress.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    const sorted =
+        [...words].sort(
+            (a,b) => b.mastery - a.mastery
+        );
+
+    container.innerHTML = sorted.map(word => `
+
+        <div class="progress-row">
+
+            <strong>
+                ${escapeHTML(word.word)}
+            </strong>
+
+            <div class="progress-bar">
+
+                <div
+                    class="progress-fill"
+                    style="width:${word.mastery}%">
+                </div>
+
+            </div>
+
+            <strong>
+                ${word.mastery}%
+            </strong>
+
+        </div>
+
+    `).join("");
+}
+
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+
+function shuffle(array) {
+
+    for (
+        let i = array.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(Math.random() * (i + 1));
+
+        [array[i], array[j]] =
+            [array[j], array[i]];
+    }
+
+    return array;
+}
+
+
+function escapeRegExp(string) {
+
+    return string.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+    );
+}
+
+
+function escapeHTML(string) {
+
+    return String(string)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2500);
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+renderWords();
+updateDashboard();
+
+</script>
+
+</body>
+</html>
+```
